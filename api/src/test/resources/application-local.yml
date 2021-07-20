@@ -1,0 +1,24 @@
+server:
+  port: 8080
+
+spring:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL55Dialect
+#        show_sql: true # logback 과 중복되어 주석처리함.
+        format_sql: true
+        hbm2ddl:
+          auto: none
+#        resource.beans.container: org.springframework.orm.hibernate5.SpringBeanContainer # JPA Listener 에서 스프링 Bean DI 하기 위한 설정. (hibernate 5.3+, spring 5.1+)
+#        session_factory.session_scoped_interceptor: EntityInterceptor 적용 (hibernate 5.2+)
+    open-in-view: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*" # 모든 actuator기능 open
+
+logging.level.org.springframework.orm.jpa: trace # 트랜잭션 로깅
+#logging.level.org.hibernate.type.descriptor.sql: trace

@@ -1,0 +1,22 @@
+version '1.0-SNAPSHOT'
+
+dependencies {
+    implementation project(':core')
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // swagger
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+
+    // QueryDSL
+    compile("com.querydsl:querydsl-core")
+    compile("com.querydsl:querydsl-jpa")
+    annotationProcessor(
+            "com.querydsl:querydsl-apt::jpa",
+            "jakarta.persistence:jakarta.persistence-api",
+            "jakarta.annotation:jakarta.annotation-api"
+    )
+
+    clean {
+        delete file('src/main/generated')
+    }
+}
