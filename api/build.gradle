@@ -9,6 +9,9 @@ dependencies {
     // swagger
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
 
+    // log4jdbc (properties 설정해야 driver deprecated 제거됨)
+    implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
+
     // QueryDSL
     compile("com.querydsl:querydsl-core")
     compile("com.querydsl:querydsl-jpa")
