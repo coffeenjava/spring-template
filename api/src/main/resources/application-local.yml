@@ -21,6 +21,11 @@ spring:
   h2:
     console:
       enabled: true
+#  batch:
+#    jdbc:
+#      table-prefix: PRODUCT_BATCH_
+#      schema: classpath:/org/springframework/batch/core/schema-h2.sql # 스키마 위치 설정
+#      initialize-schema: always
 
 management:
   endpoints:
