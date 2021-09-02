@@ -10,7 +10,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
  * validation message 설정
  */
 @Configuration
-public class CustomMessageSourceConfiguration {
+public class CustomMessageSourceConfig {
 
     @Bean
     public MessageSource messageSource() {
