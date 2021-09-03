@@ -43,3 +43,6 @@ logging.level:
 #  jdbc.connection: debug # open&close 정보
 #  jdbc.resultset: off # ResultSet을 포함한 모든 JDBC 호출 정보
 #  jdbc.audit: off # ResultSet을 제외한 모든 JDBC 호출 정보
+
+# batch
+#spring.batch.job.names: ${job.name:NONE} # 수행할 job 이름. run arguments 로 입력받는다. ex) --job.name=syncShowInAppJob requestDate=20210731

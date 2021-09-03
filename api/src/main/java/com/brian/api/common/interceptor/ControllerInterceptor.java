@@ -35,7 +35,6 @@ public class ControllerInterceptor implements HandlerInterceptor {
         try {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             Class<?> handlerMethodType = handlerMethod.getBeanType();
-
             // 로그 시작
             // todo 분기문 왜 썼더라..
             if (BasicErrorController.class.isAssignableFrom(handlerMethodType)) {

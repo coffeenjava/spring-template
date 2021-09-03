@@ -1,5 +1,6 @@
 package com.brian.api.common.filter;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -12,6 +13,7 @@ import java.io.IOException;
  * 매 요청마다 단 한번 실행되는 OncePerRequestFilter 를 구현한 필터
  * request 로깅에 사용되므로 이 필터는 필수
  */
+@Component
 public class CustomRequestFilter extends OncePerRequestFilter {
 
     @Override
