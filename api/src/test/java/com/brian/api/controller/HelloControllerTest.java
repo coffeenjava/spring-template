@@ -1,6 +1,6 @@
 package com.brian.api.controller;
 
-import com.brian.api.common.aop.RequestDtoValidationAspect;
+import com.brian.api.common.aop.RequestValidationAspect;
 import com.brian.api.config.CustomMessageSourceConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(value = HelloController.class) // 웹 요청/응답 관련(Controller etc) 테스트. 지정하지 않으면 모든 Controller 가 빈으로 등록된다.
 @Import({ // 적용할 config 나 aop
-        AopAutoConfiguration.class, RequestDtoValidationAspect.class,
+        AopAutoConfiguration.class, RequestValidationAspect.class,
         CustomMessageSourceConfig.class
 })
 @TestInstance(TestInstance.Lifecycle.PER_CLASS) // 하나의 인스턴스로 모든 테스트 메서드 수행

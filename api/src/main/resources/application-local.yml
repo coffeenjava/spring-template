@@ -1,5 +1,8 @@
 server:
   port: 8090
+  error: # Whitelabel Error Page config
+    include-exception: true
+    include-stacktrace: always
 
 spring:
   datasource:

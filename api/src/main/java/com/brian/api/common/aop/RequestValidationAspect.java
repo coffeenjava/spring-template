@@ -28,7 +28,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Aspect
 @Component
-public class RequestDtoValidationAspect {
+public class RequestValidationAspect {
 
 	private final Validator validator;
 

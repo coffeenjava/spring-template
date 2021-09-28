@@ -14,6 +14,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addFormatters(FormatterRegistry registry) {
         /**
          * request parameter converters
+         * springboot 에서는 converter 를 bean 으로 선언만 해도 동작하나
+         * 어떤 커스텀 컨버터들이 사용되는지 명시적으로 알 수 있도록 등록한다.
          */
         registry.addConverter(new StringToLocalDateConverter());
         registry.addConverter(new StringToLocalDateTimeConverter());
