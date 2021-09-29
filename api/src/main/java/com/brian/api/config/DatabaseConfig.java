@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Profile("!local")
+@Slf4j
 @Configuration
 public class DatabaseConfig {
 
@@ -61,7 +62,6 @@ public class DatabaseConfig {
         return new JpaTransactionManager(emf);
     }
 
-    @Slf4j
     class ReplicationRoutingDataSource extends AbstractRoutingDataSource {
 
         @Override
