@@ -5,6 +5,7 @@
 # intellij
 .idea
 .gradle
+.iml
 out
 build
 generated/
