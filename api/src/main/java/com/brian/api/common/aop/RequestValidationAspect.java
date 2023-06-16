@@ -35,6 +35,7 @@ public class RequestValidationAspect {
 	@Before("execution(* *(.., @org.springframework.web.bind.annotation.RequestBody (*), ..))")
 	@Order
 	public void before(JoinPoint joinPoint) {
+		System.out.println();
 		for (Object arg : joinPoint.getArgs()) {
 			if (arg instanceof Collection) {
 				/**

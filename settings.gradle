@@ -1,3 +1,2 @@
-rootProject.name = 'spring-template'
-include 'api'
-include 'core'
+rootProject.name = "spring-template"
+include("api")

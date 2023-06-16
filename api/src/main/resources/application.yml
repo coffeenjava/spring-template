@@ -1,3 +1,6 @@
+### 프로파일 설정을 하지 않으면 기본적으로 Local 로 설정된다.
+spring.profiles.active: local
+
 server:
   port: 8090
   error: # Whitelabel Error Page config
@@ -24,6 +27,7 @@ spring:
   h2:
     console:
       enabled: true
+
 #  batch:
 #    jdbc:
 #      table-prefix: PRODUCT_BATCH_

@@ -1,5 +1,6 @@
 package com.brian.api.repository.entity;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,15 +14,15 @@ import javax.persistence.Id;
 
 @Getter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class TestEntity {
+public class TestMember {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     private String name;
+    private String password;
 }
