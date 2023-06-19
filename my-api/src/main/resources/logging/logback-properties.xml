@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<included>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <!-- override properties -->
+    <property name="DEFAULT_CONSOLE_LOG_PATTERN" value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%13t]){faint}%clr([IP=%X{X-Forwarded-For},logKey=%X{logKey}]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wEx"/>
+    <property name="CONSOLE_LOG_PATTERN"         value="{&quot;timestamp&quot;: &quot;%date{yyyy-MM-dd HH:mm:ss.SSS}&quot;, &quot;level&quot;: &quot;%level&quot;, &quot;service&quot;: &quot;${APP_NAME:-}&quot;, &quot;pid&quot;: &quot;${PID:-}&quot;, &quot;thread&quot;: &quot;%thread&quot;, &quot;ip&quot;: &quot;%X{X-Forwarded-For}&quot;, &quot;logKey&quot;: &quot;%X{logKey}&quot;, &quot;class&quot;: &quot;%logger{40}&quot;, &quot;message&quot;: &quot;%message%n%ex&quot;, &quot;line&quot;: &quot;%line&quot;}"/>
+    <property name="JSON_FILE_LOG_PATTERN"       value="{&quot;timestamp&quot;: &quot;%date{yyyy-MM-dd HH:mm:ss.SSS}&quot;, &quot;level&quot;: &quot;%level&quot;, &quot;service&quot;: &quot;${APP_NAME:-}&quot;, &quot;pid&quot;: &quot;${PID:-}&quot;, &quot;thread&quot;: &quot;%thread&quot;, &quot;ip&quot;: &quot;%X{X-Forwarded-For}&quot;, &quot;logKey&quot;: &quot;%X{logKey}&quot;, &quot;class&quot;: &quot;%logger{40}&quot;, &quot;message&quot;: &quot;%message%n%ex&quot;, &quot;line&quot;: &quot;%line&quot;}"/>
+    <property name="LOG_PATH"                    value="/${APP_NAME:-${HOME}}/logs" />
+    <property name="MAX_HISTORY"                 value="15" />
+    <property name="MAX_FILE_SIZE"               value="10MB" />
+    <property name="TOTAL_SIZE_CAP"              value="1GB" />
+</included>
