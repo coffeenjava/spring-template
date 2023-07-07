@@ -17,7 +17,7 @@ public @interface MaxByte {
      */
     int value();
 
-    String message() default "{com.brian.api.common.validate.MaxByte.message}";
+    String message() default "{com.my.api.common.validate.MaxByte.message}";
 
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};

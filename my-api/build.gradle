@@ -4,6 +4,9 @@ dependencies {
     // util
     implementation 'commons-io:commons-io:2.11.0'
 
+    // http client for RestTemplate
+    implementation 'org.apache.httpcomponents:httpclient'
+
     // log4jdbc (properties 설정해야 driver deprecated 제거됨)
     implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
 

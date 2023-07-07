@@ -1,23 +1,32 @@
 package com.my.api.config;
 
 import org.springframework.boot.validation.MessageInterpolatorFactory;
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.validation.Errors;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import java.util.Collection;
 
 /**
- * {@link javax.validation.Valid} 선언된 요청 객체 검증 오버라이드
+ * validation message + Validator 설정
  */
 @Configuration
 public class RequestValidationConfig {
 
     @Bean
-    public LocalValidatorFactoryBean hntValidatorFactoryBean() {
-         return new RequestValidator();
+    public MessageSource messageSource() {
+        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        messageSource.setBasename("classpath:messages/constraints");
+        messageSource.setDefaultEncoding("UTF-8");
+        return messageSource;
+    }
+
+    @Bean
+    public LocalValidatorFactoryBean hntValidatorFactoryBean(MessageSource messageSource) {
+        return new RequestValidator(messageSource);
     }
 
     /**
@@ -28,6 +37,15 @@ public class RequestValidationConfig {
      * <br>Collection 에 담긴 객체를 검증하도록 오버라이드함
      */
     public class RequestValidator extends LocalValidatorFactoryBean {
+
+        public RequestValidator(MessageSource messageSource) {
+            /**
+             * MessageInterpolator 설정해야만 커스터마이징한 메시지가 사용된다.
+             * {@link #messageSource()}
+             */
+            MessageInterpolatorFactory interpolatorFactory = new MessageInterpolatorFactory(messageSource);
+            setMessageInterpolator(interpolatorFactory.getObject());
+        }
 
         @Override
         public void validate(final Object target, final Errors errors) {

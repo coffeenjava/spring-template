@@ -4,6 +4,7 @@ import com.my.api.common.annotation.IgnoreApiCommonResponse;
 import com.my.api.common.model.ApiCommonResponse;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -35,8 +36,13 @@ public class ApiResponseBodyAdvice implements ResponseBodyAdvice {
                                   final Class selectedConverterType,
                                   final ServerHttpRequest request,
                                   final ServerHttpResponse response) {
+        // 응답이 DTO 객체인 경우에만 변환
+        if (MappingJackson2HttpMessageConverter.class.isAssignableFrom(selectedConverterType)) {
+            return new ApiCommonResponse(body);
+        }
 
-        return new ApiCommonResponse(body);
+        // 응답이 String 인 케이스는 그냥 내려준다
+        return body;
     }
 
 }

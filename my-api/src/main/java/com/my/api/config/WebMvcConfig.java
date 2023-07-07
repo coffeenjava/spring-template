@@ -1,24 +1,22 @@
 package com.my.api.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.my.api.common.convert.StringToEnumConverterFactory;
 import com.my.api.common.convert.StringToLocalDateConverter;
 import com.my.api.common.convert.StringToLocalDateTimeConverter;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.my.api.common.convert.StringToLocalTimeConverter;
+import com.my.api.common.interceptor.ApiResponseBodyAdvice;
+import com.my.api.common.model.ApiCommonResponse;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.MethodParameter;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.http.server.ServletServerHttpResponse;
-import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor;
 import org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodProcessor;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import com.my.api.common.interceptor.ApiResponseBodyAdvice;
-import com.my.api.common.model.ApiCommonResponse;
+import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor;
 
 import java.util.List;
 
@@ -32,6 +30,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
          * springboot 에서는 converter 를 bean 으로 선언만 해도 동작하나
          * 어떤 커스텀 컨버터들이 사용되는지 명시적으로 알 수 있도록 등록한다.
          */
+        registry.addConverter(new StringToLocalTimeConverter());
         registry.addConverter(new StringToLocalDateConverter());
         registry.addConverter(new StringToLocalDateTimeConverter());
         registry.addConverterFactory(new StringToEnumConverterFactory());

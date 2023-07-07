@@ -20,13 +20,12 @@ public enum YesNo implements BaseEnum {
 
     public static YesNo byCode(String code) {
         return Arrays.stream(YesNo.values())
-                .filter(e -> Objects.nonNull(e.getCode()))
-                .filter(e -> e.getCode().equals(code))
+                .filter(e -> code.equals(e.getCode()))
                 .findAny()
                 .orElse(YesNo.NONE);
     }
 
-    public static YesNo byBoolean(Boolean yesNo) {
+    public static YesNo getBy(Boolean yesNo) {
         if (Objects.isNull(yesNo)) {
             return NONE;
         }

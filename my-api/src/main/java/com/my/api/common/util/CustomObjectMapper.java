@@ -2,17 +2,17 @@ package com.my.api.common.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
 
+@RequiredArgsConstructor
 @Component
 public class CustomObjectMapper {
 
-    @Autowired
-    private ObjectMapper mapper;
+    private final ObjectMapper mapper;
 
     public String writeInputStreamAsPrettyString(InputStream is) {
         Object value = readValue(is, Object.class);

@@ -51,7 +51,11 @@ public class GlobalExceptionHandler {
         }
 
         // stacktrace 포함 로깅
-        log.error(logMsg.toString(), e);
+        if (e.getErrorCode().getHttpStatus().is5xxServerError()) { // 5xx 일때만 error 로 남긴다
+            log.error(logMsg.toString(), e);
+        } else {
+            log.info(logMsg.toString(), e);
+        }
 
         ErrorCode ec = e.getErrorCode();
 

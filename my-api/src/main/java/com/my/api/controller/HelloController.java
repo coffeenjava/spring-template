@@ -1,10 +1,10 @@
 package com.my.api.controller;
 
 import com.my.api.common.consts.Gender;
-import com.my.api.common.consts.YesNo;
 import com.my.api.common.exception.ApiRuntimeException;
 import com.my.api.common.exception.message.CommonErrorCode;
 import com.my.api.common.model.BaseRequest;
+import com.my.api.common.validate.MaxByte;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,6 +38,12 @@ public class HelloController {
         return new SampleResponseDto(LocalDateTime.now(), request.getName(), request.isAdult());
     }
 
+    @PostMapping("/dto")
+    public SampleResponseDto post(@Valid @RequestBody SampleRequestDto request) {
+        System.out.println(request);
+        return new SampleResponseDto(LocalDateTime.now(), request.getName(), request.isAdult());
+    }
+
     @PostMapping
     public SampleResponseDto save(@RequestParam LocalDate date, @RequestParam Gender gender, @Valid @RequestBody SampleRequestDto request) {
         System.out.println(date);
@@ -58,9 +64,11 @@ public class HelloController {
         @NotBlank
         String name;
 
+        @MaxByte(10)
         String hobby;
 
         boolean isAdult;
+
 
         /**
          * validate() 호출 전 기본 데이터 설정 등

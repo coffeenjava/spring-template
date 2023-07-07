@@ -17,7 +17,7 @@ public @interface NumberUnit {
      */
     long value();
 
-    String message() default "{com.brian.api.common.validate.NumberUnit.message}";
+    String message() default "{com.my.api.common.validate.NumberUnit.message}";
 
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};

@@ -5,11 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StreamUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
@@ -22,12 +24,20 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
+import java.nio.charset.UnsupportedCharsetException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * 요청/응답 로깅 Filter
@@ -90,7 +100,8 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response, final FilterChain filterChain) throws ServletException, IOException {
-        if (isMultipartFormData(request)) { // 멀티파트는 로깅 제외
+        // Multipart 는 로깅 제외
+        if (isMultipartFormData(request)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -99,29 +110,37 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
         HttpServletRequest requestToUse = request;
 
         if (isFirstRequest) {
+            // 재사용 가능한 요청으로 래핑
             requestToUse = new ReusableRequestWrapper(request);
+
+            // 요청 정보 생성
             String requestInfo = createRequestInfo(requestToUse);
 
             if (isLineBreak == false) {
                 requestInfo = requestInfo.replaceAll("(\\r|\\n)", "");
             }
 
+            // 요청 정보 로깅
             log.info(requestInfo);
         }
 
+        // 재사용 가능한 응답으로 래핑
         final ContentCachingResponseWrapper cachingResponse = new ContentCachingResponseWrapper(response);
 
+        // 필터 체인 호출 + 실행시간 계산
         long start = System.currentTimeMillis();
         filterChain.doFilter(requestToUse, cachingResponse);
         final long executionTime = System.currentTimeMillis() - start;
 
         if (isFirstRequest) {
+            // 응답 정보 생성
             String responseInfo = createResponseInfo(requestToUse, cachingResponse, executionTime);
 
             if (isLineBreak == false) {
                 responseInfo = responseInfo.replaceAll("(\\r|\\n)", "");
             }
 
+            // 응답 로깅
             log.info(responseInfo);
         }
 
@@ -136,10 +155,8 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
      * @return
      */
     private boolean isMultipartFormData(final HttpServletRequest request) {
-        return Optional.ofNullable(request)
-                .flatMap(request1 -> Optional.ofNullable(request1.getContentType()))
-                .map(contentType -> contentType.startsWith(MediaType.MULTIPART_FORM_DATA_VALUE))
-                .orElse(false);
+        return request.getContentType() != null
+                && request.getContentType().contains(MediaType.MULTIPART_FORM_DATA_VALUE);
     }
 
     /**
@@ -168,13 +185,20 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
         if (isIncludePayload) {
             try {
                 final byte[] buf = IOUtils.toByteArray(request.getInputStream());
-                String payload = getMessagePayload(buf);
+                String payload = getMessagePayload(buf, request.getCharacterEncoding());
 
                 if (payload != null) {
+                    // form post 요청이면 url decoding
+                    if (isFormPost(request)) {
+                        payload = URLDecoder.decode(payload, request.getCharacterEncoding());
+                    }
+
                     payload = payload.replaceAll("(\\r|\\n)","");
                     msg.append("\npayload=").append(payload).append(' ');
                 }
-            } catch (IOException e) {}
+            } catch (Exception e) {
+                log.warn("request body parsing 실패", e);
+            }
         }
 
         return msg.toString();
@@ -205,7 +229,8 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
         }
 
         if (isIncludeResponsePayload) {
-            String payload = getMessagePayload(response.getContentAsByteArray());
+            // 응답 payload 는 항상 UTF-8 로 파싱
+            String payload = getMessagePayload(response.getContentAsByteArray(), StandardCharsets.UTF_8.name());
             if (payload != null) {
                 msg.append("\npayload=").append(payload);
             }
@@ -215,31 +240,52 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
     }
 
     /**
-     * maxPayload 에 맞게 내용 추출
+     * 최대 로깅 길이만큼만 내용 추출
      */
-    protected String getMessagePayload(byte[] buf) {
+    protected String getMessagePayload(byte[] buf, String characterEncoding) {
         if (buf.length > 0) {
             int length = Math.min(buf.length, maxPayloadLength);
-            return new String(buf, 0, length, StandardCharsets.UTF_8);
+
+            Charset charset;
+            try {
+                charset = Charset.forName(characterEncoding);
+            } catch (UnsupportedCharsetException e) {
+                charset = StandardCharsets.UTF_8;
+            }
+
+            return new String(buf, 0, length, charset);
         }
         return null;
     }
 
+    /**
+     * 응답 헤더 추출
+     */
     protected HttpHeaders getResponseHeaders(HttpServletResponse response) {
         HttpHeaders headers = new HttpHeaders();
-        Collection<String> headerNames = response.getHeaderNames();
 
-        if (headerNames != null) {
-            headerNames.stream()
-                    .distinct()
-                    .forEach(name -> {
-                        for (String value : response.getHeaders(name)) {
-                            headers.add(name, value);
-                        }
-                    });
+        List<String> headerNameList = Optional.ofNullable(response.getHeaderNames())
+                .stream()
+                .flatMap(names -> names.stream())
+                .distinct()
+                .collect(Collectors.toList());
+
+        for (String name : headerNameList) {
+            for (String value : response.getHeaders(name)) {
+                headers.add(name, value);
+            }
         }
 
         return headers;
+    }
+
+    /**
+     * Form & Post 요청 여부
+     */
+    protected static boolean isFormPost(HttpServletRequest request) {
+        String contentType = request.getContentType();
+        return (contentType != null && contentType.contains(MediaType.APPLICATION_FORM_URLENCODED_VALUE) &&
+                HttpMethod.POST.matches(request.getMethod()));
     }
 
     /**
@@ -251,9 +297,15 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
     static class ReusableRequestWrapper extends HttpServletRequestWrapper {
 
         /**
-         * 재사용할 inputStream 내용
+         * 재사용할 inputStream buffer
          */
         private byte[] buf;
+
+        /**
+         * Form Post 요청(application/x-www-form-urlencoded) 일 경우 body 파라미터를 담아둘 map
+         */
+        private Map<String, List<String>> parameterMap;
+
 
         public ReusableRequestWrapper(HttpServletRequest request) throws IOException {
             super(request);
@@ -264,6 +316,96 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
         public ServletInputStream getInputStream() {
             return new CustomServletInputStream(buf);
         }
+
+        /**
+         * Form Post 요청의 body 파라미터를 꺼내올 수 있도록 하기 위해 오버라이드
+         *
+         * <p>관련 내용 참고: https://jira-hanatour.atlassian.net/browse/MGTT-8466
+         */
+        @Override
+        public String[] getParameterValues(String name) {
+            String[] parameterValues = super.getParameterValues(name);
+
+            if (isFormPost(this) == false) {
+                return parameterValues;
+            }
+
+            if (parameterMap == null) {
+                parseFormParameter();
+            }
+
+            List<String> paramList = parameterMap.get(name);
+
+            if (CollectionUtils.isEmpty(paramList)) {
+                return parameterValues;
+            }
+
+            if (parameterValues != null) {
+                for (String parameterValue : parameterValues) {
+                    paramList.add(parameterValue);
+                }
+            }
+
+            return paramList.toArray(String[]::new);
+        }
+
+        /**
+         * query string URLDecoding 을 위해 오버라이드
+         */
+        @Override
+        public String getQueryString() {
+            String queryString = super.getQueryString();
+
+            if (StringUtils.hasText(queryString)) {
+                try {
+                    queryString = URLDecoder.decode(queryString, getCharacterEncoding());
+                } catch (UnsupportedEncodingException e) {
+                }
+            }
+
+            return queryString;
+        }
+
+        @Override
+        public String getCharacterEncoding() {
+            String enc = super.getCharacterEncoding();
+            return (enc != null ? enc : StandardCharsets.UTF_8.name());
+        }
+
+        /**
+         * Form Post 요청의 body 파라미터를 map 에 담아둔다.
+         */
+        private void parseFormParameter() {
+            try {
+                parameterMap = new HashMap<>();
+                String charSet = getCharacterEncoding();
+                String payload = new String(buf, charSet);
+
+                // name=b&age=1,5&name=c,d
+                if (StringUtils.hasText(payload)) {
+                    String[] split = payload.split("&");
+
+                    for (String param: split) {
+                        String[] keyValue = param.split("=");
+                        if (keyValue.length == 2) {
+                            String key = URLDecoder.decode(keyValue[0], charSet);
+                            if (parameterMap.get(key) == null) {
+                                parameterMap.put(key, new ArrayList<>());
+                            }
+
+                            String[] values = keyValue[1].split(",");
+                            for (String value : values) {
+                                value = URLDecoder.decode(value, charSet);
+                                parameterMap.get(key).add(value);
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                log.warn("post form body parsing 실패", e);
+            }
+        }
+
 
         static class CustomServletInputStream extends ServletInputStream {
 

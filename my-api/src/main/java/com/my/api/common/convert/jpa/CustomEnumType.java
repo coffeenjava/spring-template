@@ -18,7 +18,7 @@ import java.util.Properties;
 public class CustomEnumType implements UserType, DynamicParameterizedType {
 
     // 타입 명
-    public static final String NAME = "com.brian.api.common.convert.jpa.CustomEnumType";
+    public static final String NAME = "com.my.api.common.convert.jpa.CustomEnumType";
 
     private Class<? extends BaseEnum> enumClass;
     private String entityName;
