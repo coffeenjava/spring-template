@@ -7,6 +7,9 @@ dependencies {
     // http client for RestTemplate
     implementation 'org.apache.httpcomponents:httpclient'
 
+    // logback
+    implementation "net.logstash.logback:logstash-logback-encoder:7.2"
+
     // log4jdbc (properties 설정해야 driver deprecated 제거됨)
     implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
 
@@ -18,6 +21,9 @@ dependencies {
     annotationProcessor("jakarta.persistence:jakarta.persistence-api")
     // java.lang.NoClassDefFoundError (javax.annotation.Generated) 발생 대응
     annotationProcessor("jakarta.annotation:jakarta.annotation-api")
+
+    // maria db
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
     clean {
         delete file('src/main/generated')
