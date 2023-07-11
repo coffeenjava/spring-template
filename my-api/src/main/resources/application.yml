@@ -1,0 +1,64 @@
+### 프로파일 설정을 하지 않으면 기본적으로 Local 로 설정된다.
+spring.profiles.active: local
+
+### app
+app:
+  module-name: my-api
+  log-file-name: app.log
+
+### logging
+logging:
+  config: classpath:logging/logback-${spring.profiles.active}.xml
+  level:
+    com.my: info
+
+### server
+server:
+  port: 8080
+  shutdown: graceful
+  error: # Whitelabel Error Page config
+    include-exception: true
+    include-stacktrace: always
+
+### spring
+spring:
+  application:
+    name: ${app.module-name}
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+
+### JPA
+spring.jpa:
+  open-in-view: false
+  properties:
+    hibernate:
+      default_batch_fetch_size: 1000
+      physical_naming_strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+  hibernate:
+    ddl-auto: none
+  generate-ddl: false
+
+### database
+### 맞춰서 수정 필요
+database:
+  datasource-write:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    jdbc-url: jdbc:mysql://host:port/schema?useCursors=false&sendStringParametersAsUnicode=false&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&autoReconnect=true&autoReconnectForPools=true&rewriteBatchedStatements=true&profileSQL=true&logger=Slf4JLogger
+    username: coffeenjava
+    password: 1234
+  datasource-read:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    jdbc-url: jdbc:mysql://host:port/schema?useCursors=false&sendStringParametersAsUnicode=false&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&autoReconnect=true&autoReconnectForPools=true&rewriteBatchedStatements=true&profileSQL=true&logger=Slf4JLogger
+    username: coffeenjava
+    password: 1234
+
+### 헬스체크용 actuator
+management.endpoints.web.exposure.include: health,info
+management.endpoint.health.show-details: never
+
+### 어플리케이션 커스텀 기능
+my-api:
+  request-response-logging:
+    line-break: true
+    exclude-uri: # 로깅 제외할 요청 uri 패턴
+      - ^\/(actuator)\/.* # 헬스체크

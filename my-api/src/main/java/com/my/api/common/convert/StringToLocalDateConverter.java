@@ -1,0 +1,18 @@
+package com.my.api.common.convert;
+
+import com.my.api.common.util.DateTimeUtil;
+import org.springframework.core.convert.converter.Converter;
+
+import java.time.LocalDate;
+
+/**
+ * DTO 가 아닌, query 파라미터로 들어오는 LocalDate 객체 변환기
+ *
+ * @see DateTimeUtil#DATE_FORMATTER
+ */
+public class StringToLocalDateConverter implements Converter<String, LocalDate> {
+    @Override
+    public LocalDate convert(String source) {
+        return LocalDate.parse(source, DateTimeUtil.DATE_FORMATTER);
+    }
+}

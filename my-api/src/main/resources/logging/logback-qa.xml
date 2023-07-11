@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="logging/logback-properties.xml"/>
+    <springProperty scope="context" name="APP_NAME" source="spring.application.name"/>
+    <property name="LOG_PATH" value="/${APP_NAME}/logs"/>
+
+    <!-- appender -->
+    <include resource="logging/logback-console-appender.xml"/>
+    <include resource="logging/logback-json-file-appender.xml"/>
+
+    <!-- logger -->
+    <logger name="com.my" level="DEBUG"/>
+
+    <!-- root -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="JSON_FILE"/>
+    </root>
+</configuration>
