@@ -42,15 +42,15 @@ spring.jpa:
 ### 맞춰서 수정 필요
 database:
   datasource-write:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    jdbc-url: jdbc:mysql://host:port/schema?useCursors=false&sendStringParametersAsUnicode=false&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&autoReconnect=true&autoReconnectForPools=true&rewriteBatchedStatements=true&profileSQL=true&logger=Slf4JLogger
-    username: coffeenjava
-    password: 1234
+    driver-class-name: org.mariadb.jdbc.Driver
+    jdbc-url: jdbc:mariadb://mysql:3306/myschema?allowPublicKeyRetrieval=true&useSSL=false
+    username: user
+    password: password
   datasource-read:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    jdbc-url: jdbc:mysql://host:port/schema?useCursors=false&sendStringParametersAsUnicode=false&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&autoReconnect=true&autoReconnectForPools=true&rewriteBatchedStatements=true&profileSQL=true&logger=Slf4JLogger
-    username: coffeenjava
-    password: 1234
+    driver-class-name: org.mariadb.jdbc.Driver
+    jdbc-url: jdbc:mariadb://mysql:3306/myschema?allowPublicKeyRetrieval=true&useSSL=false&profileSQL=true&logger=Slf4JLogger
+    username: user
+    password: password
 
 ### 헬스체크용 actuator
 management.endpoints.web.exposure.include: health,info

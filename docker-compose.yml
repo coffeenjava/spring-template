@@ -1,0 +1,56 @@
+version: "3.8"
+
+services: # 컨테이너 목록
+  my-api:
+    container_name: my-api # 생성될 컨테이너 이름
+    build: # Dockerfile 실행
+      context: ./ # Dockerfile 이 실행될 루트. 지정된 위치 하위로만 접근 가능하므로 gradle 빌드를 위해 최상위 경로를 설정
+      dockerfile: my-api/Dockerfile # Dockerfile 의 위치
+      args: # Dockerfile 실행에 넘겨줄 변수
+        - APP_NAME=my-api
+        - PROFILE=${PROFILE}
+    #        - PINPOINT_ENABLE=${PINPOINT_ENABLE}
+    #        - PINPOINT_VERSION=${PINPOINT_VERSION}
+    ports: # 포트 매핑 host:container
+      - "8080:8080"
+      - "15805:5005"
+    environment: # 환경변수
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+    networks:
+      - local-network
+    healthcheck:
+      test: [ "CMD", "curl" ,"http://localhost:8080/actuator/health" ]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+    depends_on: # 실행 순서 제어
+      mysql:
+        condition: service_healthy # mysql 의 health 체크가 성공한 후 start
+
+  mysql:
+    container_name: mysql
+    image: mysql:8 # base 이미지
+    platform: linux/amd64
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_ALLOW_EMPTY_PASSWORD=${MYSQL_ALLOW_EMPTY_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+    volumes: # 마운팅 host:container
+      - "./env/mysql/conf.d:/etc/mysql/conf.d:ro"
+      - "./env/mysql/data:/var/lib/mysql:rw"
+    networks:
+      - local-network
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks: # 컨테이너끼리 연결(호출)을 위한 네트워크
+  local-network:
+    driver: bridge
+#    external: network_name # 외부 네트워크 연결 설정

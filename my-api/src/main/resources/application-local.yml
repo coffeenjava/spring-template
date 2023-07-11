@@ -14,7 +14,6 @@ spring:
           auto: none
 #        resource.beans.container: org.springframework.orm.hibernate5.SpringBeanContainer # JPA Listener 에서 스프링 Bean DI 하기 위한 설정. (hibernate 5.3+, spring 5.1+)
 #        session_factory.session_scoped_interceptor: EntityInterceptor 적용 (hibernate 5.2+)
-    open-in-view: false
     hibernate:
       ddl-auto: create
     generate-ddl: true
