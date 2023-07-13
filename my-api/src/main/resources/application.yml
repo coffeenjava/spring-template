@@ -34,9 +34,8 @@ spring.jpa:
     hibernate:
       default_batch_fetch_size: 1000
       physical_naming_strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
-  hibernate:
-    ddl-auto: none
-  generate-ddl: false
+      hbm2ddl:
+        auto: none
 
 ### database
 ### 맞춰서 수정 필요

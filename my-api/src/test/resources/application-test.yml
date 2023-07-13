@@ -7,17 +7,14 @@ spring:
   jpa:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL55Dialect
+#        dialect: org.hibernate.dialect.MySQL55Dialect # h2 db 사용시 이 설정 있으면 ddl 에러 발생
+        hbm2ddl:
+          auto: create-drop
         show_sql: true # logback 과 중복되어 주석처리함.
         format_sql: true
-        hbm2ddl:
-          auto: none
 #        resource.beans.container: org.springframework.orm.hibernate5.SpringBeanContainer # JPA Listener 에서 스프링 Bean DI 하기 위한 설정. (hibernate 5.3+, spring 5.1+)
 #        session_factory.session_scoped_interceptor: EntityInterceptor 적용 (hibernate 5.2+)
     open-in-view: false
-    hibernate:
-      ddl-auto: create
-    generate-ddl: true
   h2:
     console:
       enabled: true
@@ -29,9 +26,12 @@ management:
         include: "*" # 모든 actuator기능 open
 
 logging.level:
-  org.springframework:
-    web: debug
-#    orm.jpa: trace # 트랜잭션 로깅
+  org:
+    springframework:
+      web: debug
+    #      orm.jpa: trace # 트랜잭션 로깅
+    hibernate:
+      type.descriptor: trace # sql 파라미터 로깅
   jdbc: off
   jdbc.sqltiming: info # SQL문과 해당 SQL을 실행시키는데 수행된 시간 정보(milliseconds). sqlonly 설정 포함
 #  jdbc.resultsettable: info # 조회 결과

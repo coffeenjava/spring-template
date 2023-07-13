@@ -28,9 +28,13 @@ management:
         include: "*" # 모든 actuator기능 open
 
 logging.level:
-  org.springframework:
-    web: debug
-#    orm.jpa: trace # 트랜잭션 로깅
+  org:
+    springframework:
+      web: debug
+#      orm.jpa: trace # 트랜잭션 로깅
+    hibernate:
+      type.descriptor: trace # sql 파라미터 로깅
+
   jdbc: off
   jdbc.sqltiming: info # SQL문과 해당 SQL을 실행시키는데 수행된 시간 정보(milliseconds). sqlonly 설정 포함
 #  jdbc.resultsettable: info # 조회 결과

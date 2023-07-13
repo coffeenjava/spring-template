@@ -16,7 +16,7 @@ public class TestEntityRepositoryTest extends BaseDataJpaTest {
     @Autowired
     private TestEntityRepository repository;
 
-//    @Test
+    @Test
     void save() {
         // given
         String name = "Brian";
