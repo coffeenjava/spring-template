@@ -13,6 +13,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -98,6 +99,14 @@ public class ApiClientUtil {
                 .block();
     }
 
+    public static void main(String[] args) {
+        LinkedMultiValueMap params = new LinkedMultiValueMap();
+        params.add("cupnUseResCd", "HP2300043119");
+        Map result = ApiClientUtil.syncGet("https://qaapi.hanatour.com", "/ext/couponApiCategory/appliedCoupon", params, Map.class);
+        Object data = result.get("data");
+        System.out.println(data);
+    }
+
     /**
      * 단건 조회
      *
@@ -128,11 +137,11 @@ public class ApiClientUtil {
      * @param responseType 응답 타입
      * @return
      */
-    public static <T> T syncGet(String host, String path, Map<String,Object> params, Class<T> responseType) {
-        MultiValueMap<String,String> strParams = convertToStringParam(params);
-
-        return syncGet(host, path, strParams, responseType);
-    }
+//    public static <T> T syncGet(String host, String path, Map<String,Object> params, Class<T> responseType) {
+//        MultiValueMap<String,String> strParams = convertToStringParam(params);
+//
+//        return syncGet(host, path, strParams, responseType);
+//    }
 
     /**
      * 다건 응답 변환용 ParameterizedTypeReference 생성
