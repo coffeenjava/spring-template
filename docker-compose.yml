@@ -15,7 +15,7 @@ services: # 컨테이너 목록
       - "8080:8080"
       - "15805:5005"
     environment: # 환경변수
-      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 # 원격 디버깅 옵션
     networks:
       - local-network
     healthcheck:
