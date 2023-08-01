@@ -30,13 +30,14 @@ RUN mkdir -p /${APP_NAME}/bin && \
 # runner stage
 FROM amazoncorretto:17.0.7-alpine3.17 AS runner
 
-# environment
+# 빌드시 사용할 변수
 ARG PROFILE=${PROFILE}
 ARG APP_NAME=${APP_NAME}
 ARG PINPOINT_AGENT_PATH=/usr/local/pinpoint/agent
 #ARG PINPOINT_VERSION=${PINPOINT_VERSION}
 #ARG PINPOINT_ENABLE=${PINPOINT_ENABLE}
 
+# 컨테이너로 전달할 변수
 ENV PROFILE=${PROFILE}
 ENV APP_NAME=${APP_NAME}
 #ENV PINPOINT_ENABLE=${PINPOINT_ENABLE}
