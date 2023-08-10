@@ -16,6 +16,7 @@ logging:
 server:
   port: 8080
   shutdown: graceful
+  max-http-header-size: 40KB
   error: # Whitelabel Error Page config
     include-exception: true
     include-stacktrace: always

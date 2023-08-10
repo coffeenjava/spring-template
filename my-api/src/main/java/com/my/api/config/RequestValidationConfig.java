@@ -25,7 +25,7 @@ public class RequestValidationConfig {
     }
 
     @Bean
-    public LocalValidatorFactoryBean hntValidatorFactoryBean(MessageSource messageSource) {
+    public LocalValidatorFactoryBean customValidatorFactoryBean(MessageSource messageSource) {
         return new RequestValidator(messageSource);
     }
 

@@ -1,6 +1,7 @@
 package com.my.api.common.filter;
 
 import com.my.api.common.annotation.Description;
+import com.my.api.common.util.WebUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.core.annotation.Order;
@@ -189,7 +190,7 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
 
                 if (payload != null) {
                     // form post 요청이면 url decoding
-                    if (isFormPost(request)) {
+                    if (WebUtils.isFormPost(request)) {
                         payload = URLDecoder.decode(payload, request.getCharacterEncoding());
                     }
 
@@ -246,11 +247,12 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
         if (buf.length > 0) {
             int length = Math.min(buf.length, maxPayloadLength);
 
-            Charset charset;
-            try {
-                charset = Charset.forName(characterEncoding);
-            } catch (UnsupportedCharsetException e) {
-                charset = StandardCharsets.UTF_8;
+            Charset charset = StandardCharsets.UTF_8;
+
+            if (StringUtils.hasText(characterEncoding)) {
+                try {
+                    charset = Charset.forName(characterEncoding);
+                } catch (UnsupportedCharsetException e) {}
             }
 
             return new String(buf, 0, length, charset);
