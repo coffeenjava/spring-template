@@ -21,7 +21,8 @@ import java.io.IOException;
  */
 @Slf4j
 @Order(FilterOrder.INIT)
-@Component
+//@Component
+@Deprecated // TomcatCustomizer 로 기능 이동. 샘플로 남겨둔다.
 public class InitFilter extends OncePerRequestFilter {
     public static final String HEADER_ORIGIN = "Origin";
     public static final String[] CLIENT_IP_HEADER_NAMES = new String[]{

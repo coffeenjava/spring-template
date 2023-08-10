@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 public class RequestValidationAspect {
 
     /**
-     * Controller 클래스 && 인자가 BaseRequest 구현체이거나 HntBaseRequest 구현체의 Collection 인 경우 동작
+     * Controller 클래스 && 인자가 BaseRequest 구현체이거나 BaseRequest 구현체의 Collection 인 경우 동작
      */
     @Before("bean(*Controller) && " +
             "(execution(* *(.., com.my.api.common.model.BaseRequest+, ..)) || " +
