@@ -29,7 +29,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -247,12 +246,12 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
         if (buf.length > 0) {
             int length = Math.min(buf.length, maxPayloadLength);
 
-            Charset charset = StandardCharsets.UTF_8;
+            Charset charset;
 
-            if (StringUtils.hasText(characterEncoding)) {
-                try {
-                    charset = Charset.forName(characterEncoding);
-                } catch (UnsupportedCharsetException e) {}
+            try {
+                charset = Charset.forName(characterEncoding);
+            } catch (Exception e) {
+                charset = StandardCharsets.UTF_8;
             }
 
             return new String(buf, 0, length, charset);
@@ -303,6 +302,8 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
          */
         private byte[] buf;
 
+        private final String characterEncoding;
+
         /**
          * Form Post 요청(application/x-www-form-urlencoded) 일 경우 body 파라미터를 담아둘 map
          */
@@ -312,6 +313,8 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
         public ReusableRequestWrapper(HttpServletRequest request) throws IOException {
             super(request);
             buf = StreamUtils.copyToByteArray(request.getInputStream());
+            characterEncoding = StringUtils.hasText(request.getCharacterEncoding())
+                    ? request.getCharacterEncoding() : StandardCharsets.UTF_8.name();
         }
 
         @Override
@@ -360,7 +363,7 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
 
             if (StringUtils.hasText(queryString)) {
                 try {
-                    queryString = URLDecoder.decode(queryString, getCharacterEncoding());
+                    queryString = URLDecoder.decode(queryString, characterEncoding);
                 } catch (UnsupportedEncodingException e) {
                 }
             }
@@ -370,8 +373,7 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
 
         @Override
         public String getCharacterEncoding() {
-            String enc = super.getCharacterEncoding();
-            return (enc != null ? enc : StandardCharsets.UTF_8.name());
+            return characterEncoding;
         }
 
         /**
@@ -380,8 +382,7 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
         private void parseFormParameter() {
             try {
                 parameterMap = new HashMap<>();
-                String charSet = getCharacterEncoding();
-                String payload = new String(buf, charSet);
+                String payload = new String(buf, characterEncoding);
 
                 // name=b&age=1,5&name=c,d
                 if (StringUtils.hasText(payload)) {
@@ -390,14 +391,14 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
                     for (String param: split) {
                         String[] keyValue = param.split("=");
                         if (keyValue.length == 2) {
-                            String key = URLDecoder.decode(keyValue[0], charSet);
+                            String key = URLDecoder.decode(keyValue[0], characterEncoding);
                             if (parameterMap.get(key) == null) {
                                 parameterMap.put(key, new ArrayList<>());
                             }
 
                             String[] values = keyValue[1].split(",");
                             for (String value : values) {
-                                value = URLDecoder.decode(value, charSet);
+                                value = URLDecoder.decode(value, characterEncoding);
                                 parameterMap.get(key).add(value);
                             }
                         }
