@@ -22,7 +22,7 @@ import java.io.IOException;
 @Slf4j
 @Order(FilterOrder.INIT)
 //@Component
-@Deprecated // TomcatCustomizer 로 기능 이동. 샘플로 남겨둔다.
+@Deprecated // TomcatCustomizer 로 기능 이동. 샘플로 남겨둔다. 톰캣 외의 서버를 사용하게 될 경우 필터 활성화 필요
 public class InitFilter extends OncePerRequestFilter {
     public static final String HEADER_ORIGIN = "Origin";
     public static final String[] CLIENT_IP_HEADER_NAMES = new String[]{

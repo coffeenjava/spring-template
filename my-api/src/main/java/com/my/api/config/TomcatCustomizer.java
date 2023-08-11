@@ -20,6 +20,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * 톰캣 커스텀 Valve 설정
+ *
+ * 에러 로깅
+ * 요청 초기화/종료 시 필요한 기능
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Component
