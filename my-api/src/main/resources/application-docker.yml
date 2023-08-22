@@ -14,3 +14,10 @@ spring.jpa:
       format_sql: true
       hbm2ddl:
         auto: update
+
+### database
+database:
+  datasource-write:
+    jdbcUrl: jdbc:mariadb://mysql:3306/myschema?allowPublicKeyRetrieval=true&useSSL=false
+  datasource-read:
+    jdbcUrl: jdbc:mariadb://mysql:3306/myschema?allowPublicKeyRetrieval=true&useSSL=false&profileSQL=true&logger=Slf4JLogger

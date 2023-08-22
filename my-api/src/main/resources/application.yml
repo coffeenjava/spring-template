@@ -43,14 +43,24 @@ spring.jpa:
 database:
   datasource-write:
     driver-class-name: org.mariadb.jdbc.Driver
-    jdbc-url: jdbc:mariadb://mysql:3306/myschema?allowPublicKeyRetrieval=true&useSSL=false
+    jdbc-url: jdbc:mariadb://localhost:3306/myschema?allowPublicKeyRetrieval=true&useSSL=false
     username: user
     password: password
+    minimum-idle: 5
+    maximum-pool-size: 100
+    max-lifetime: 28800000
+    keepalive-time: 60000
+    idle-timeout: 60000
   datasource-read:
     driver-class-name: org.mariadb.jdbc.Driver
-    jdbc-url: jdbc:mariadb://mysql:3306/myschema?allowPublicKeyRetrieval=true&useSSL=false&profileSQL=true&logger=Slf4JLogger
+    jdbc-url: jdbc:mariadb://localhost:3306/myschema?allowPublicKeyRetrieval=true&useSSL=false&profileSQL=true&logger=Slf4JLogger
     username: user
     password: password
+    minimum-idle: 5
+    maximum-pool-size: 100
+    max-lifetime: 28800000
+    keepalive-time: 60000
+    idle-timeout: 60000
 
 ### 헬스체크용 actuator
 management.endpoints.web.exposure.include: health,info
