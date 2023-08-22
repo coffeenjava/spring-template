@@ -19,6 +19,7 @@ public class TestEntityRepositoryImpl implements TestEntityQueryRepository{
     public TestDetailDto findDetail(Long id) {
         return factory.select(
                 Projections.bean(TestDetailDto.class,
+                        testEntity.id,
                         testEntity.name,
                         testEntity2.phone,
                         testEntity2.address)

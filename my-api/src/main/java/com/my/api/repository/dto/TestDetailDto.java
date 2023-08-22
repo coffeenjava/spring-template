@@ -10,6 +10,8 @@ import lombok.Setter;
 @Setter
 public class TestDetailDto {
 
+    private Long id;
+
     private String name;
 
     private String phone;
