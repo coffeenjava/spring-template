@@ -50,6 +50,29 @@ services: # 컨테이너 목록
       timeout: 10s
       retries: 3
 
+  mysql2:
+    container_name: mysql2
+    image: mysql:8 # base 이미지
+    platform: linux/amd64
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_ALLOW_EMPTY_PASSWORD=${MYSQL_ALLOW_EMPTY_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+    volumes: # 마운팅 host:container
+      - "./env/mysql2/conf.d:/etc/mysql/conf.d:ro"
+      - "./env/mysql2/data:/var/lib/mysql:rw"
+    networks:
+      - local-network
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
 networks: # 컨테이너끼리 연결(호출)을 위한 네트워크
   local-network:
     driver: bridge
