@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,6 +52,17 @@ public class HelloController {
         System.out.println(request);
 
         return new SampleResponseDto(LocalDateTime.now(), request.getName(), request.isAdult());
+    }
+
+    /**
+     * https://www.notion.so/Query-c013d96c37194ee6a0dc128a8337f971
+     */
+    @Autowired
+    TestService service;
+    @GetMapping("/db")
+    public void test(@RequestParam String name) {
+        service.test(name);
+        System.out.println();
     }
 
     @Getter

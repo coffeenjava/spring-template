@@ -7,10 +7,10 @@ app:
   log-file-name: app.log
 
 ### logging
-logging:
-  config: classpath:logging/logback-${spring.profiles.active}.xml
-  level:
-    com.my: info
+#logging:
+#  config: classpath:logging/logback-${spring.profiles.active}.xml
+#  level:
+#    com.my: info
 
 ### server
 server:

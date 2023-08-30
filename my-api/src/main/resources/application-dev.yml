@@ -1,0 +1,14 @@
+logging:
+  level:
+    org.springframework:
+      transaction: TRACE
+      orm.jpa: TRACE
+    org.hibernate.type.descriptor.sql: TRACE
+
+spring:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL55Dialect
+        show_sql: true # logback 과 중복되어 주석처리함.
+        format_sql: true
