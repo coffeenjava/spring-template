@@ -24,31 +24,32 @@ services: # 컨테이너 목록
       timeout: 5s
       retries: 5
     depends_on: # 실행 순서 제어
-      mysql:
-        condition: service_healthy # mysql 의 health 체크가 성공한 후 start
+      mariadb:
+        condition: service_healthy # db 의 health 체크가 성공한 후 start
 
-  mysql:
-    container_name: mysql
-    image: mysql:8 # base 이미지
+  mariadb:
+    container_name: mariadb
+    image: mariadb:latest # base 이미지
     platform: linux/amd64
     ports:
       - "3306:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_ALLOW_EMPTY_PASSWORD=${MYSQL_ALLOW_EMPTY_PASSWORD}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MARIADB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=${DB_ALLOW_EMPTY_PASSWORD}
+      - MARIADB_USER=${DB_USER}
+      - MARIADB_PASSWORD=${DB_PASSWORD}
+      - MARIADB_DATABASE=${DB_SCHEMA}
     volumes: # 마운팅 host:container
       - "./env/mysql/conf.d:/etc/mysql/conf.d:ro"
       - "./env/mysql/data:/var/lib/mysql:rw"
     networks:
       - local-network
     healthcheck:
-      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+      test: [ 'CMD', '/usr/local/bin/healthcheck.sh', '--innodb_initialized' ]
+      start_period: 5s
+      timeout: 5s
+      interval: 5s
+      retries: 5
 
 networks: # 컨테이너끼리 연결(호출)을 위한 네트워크
   local-network:

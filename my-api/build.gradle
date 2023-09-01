@@ -5,7 +5,7 @@ dependencies {
     implementation 'commons-io:commons-io:2.11.0'
 
     // http client for RestTemplate
-    implementation 'org.apache.httpcomponents:httpclient5'
+    implementation 'org.apache.httpcomponents.client5:httpclient5'
 
     // logback
     implementation "net.logstash.logback:logstash-logback-encoder:7.2"

@@ -44,7 +44,6 @@ bin/
 ### Local ###
 **/logs/
 env/
-.env
 .envrc
 
 application-local.properties
