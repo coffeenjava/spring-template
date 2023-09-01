@@ -4,7 +4,7 @@ import com.my.api.common.annotation.CopyAlias;
 import com.my.api.common.annotation.Description;
 import com.my.api.common.annotation.NoCopy;
 import com.my.api.common.model.BaseEnum;
-import org.hibernate.collection.internal.AbstractPersistentCollection;
+import org.hibernate.collection.spi.AbstractPersistentCollection;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeansException;
@@ -18,7 +18,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.ReflectionUtils;
 
-import javax.persistence.Entity;
+import jakarta.persistence.Entity;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;

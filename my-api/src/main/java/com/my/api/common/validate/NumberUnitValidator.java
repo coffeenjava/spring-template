@@ -1,7 +1,7 @@
 package com.my.api.common.validate;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 /**
  * 지정된 단위의 숫자인지 검증 용도

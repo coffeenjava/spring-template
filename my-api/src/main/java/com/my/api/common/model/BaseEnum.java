@@ -1,9 +1,11 @@
 package com.my.api.common.model;
 
+import java.io.Serializable;
+
 /**
  * Enum 공통 컨버팅 적용을 위한 인터페이스
  */
-public interface BaseEnum {
+public interface BaseEnum extends Serializable {
     Object getCode();
 
     static <S extends BaseEnum> S getEnum(Class<S> cls, Object code) {

@@ -43,8 +43,7 @@ bin/
 
 ### Local ###
 **/logs/
-env/logs/
-env/mysql/data/
+env/
 .env
 .envrc
 

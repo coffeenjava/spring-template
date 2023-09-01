@@ -5,7 +5,7 @@ dependencies {
     implementation 'commons-io:commons-io:2.11.0'
 
     // http client for RestTemplate
-    implementation 'org.apache.httpcomponents:httpclient'
+    implementation 'org.apache.httpcomponents:httpclient5'
 
     // logback
     implementation "net.logstash.logback:logstash-logback-encoder:7.2"
@@ -14,9 +14,9 @@ dependencies {
     implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
 
     // JPA
-    implementation "com.querydsl:querydsl-jpa:${dependencyManagement.importedProperties['querydsl.version']}"
+    implementation "com.querydsl:querydsl-jpa:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
     // querydsl JPAAnnotationProcessor 사용 지정
-    annotationProcessor("com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa")
+    annotationProcessor("com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta")
     // java.lang.NoClassDefFoundError(javax.annotation.Entity) 발생 대응
     annotationProcessor("jakarta.persistence:jakarta.persistence-api")
     // java.lang.NoClassDefFoundError (javax.annotation.Generated) 발생 대응

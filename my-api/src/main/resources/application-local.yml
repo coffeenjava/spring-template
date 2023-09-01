@@ -7,8 +7,7 @@ spring:
   jpa:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL55Dialect
-        show_sql: true # logback 과 중복되어 주석처리함.
+        show_sql: true
         format_sql: true
         hbm2ddl:
           auto: none
@@ -34,6 +33,9 @@ logging.level:
 #      orm.jpa: trace # 트랜잭션 로깅
     hibernate:
       type.descriptor: trace # sql 파라미터 로깅
+
+  com.zaxxer.hikari: TRACE # 히카리 풀 로깅
+  com.zaxxer.hikari.HikariConfig: DEBUG
 
   jdbc: off
   jdbc.sqltiming: info # SQL문과 해당 SQL을 실행시키는데 수행된 시간 정보(milliseconds). sqlonly 설정 포함

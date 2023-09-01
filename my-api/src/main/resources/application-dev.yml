@@ -1,0 +1,15 @@
+logging:
+  level:
+    org.springframework:
+      transaction: TRACE
+      orm.jpa: TRACE
+    org.hibernate.type.descriptor.sql: TRACE
+    com.zaxxer.hikari: TRACE
+    com.zaxxer.hikari.HikariConfig: DEBUG
+
+spring:
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
