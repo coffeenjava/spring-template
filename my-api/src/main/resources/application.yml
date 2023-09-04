@@ -67,6 +67,7 @@ database:
 ### 헬스체크용 actuator
 management.endpoints.web.exposure.include: health,info
 management.endpoint.health.show-details: never
+#management.health.db.enabled: false # DB Connection 헬스 체크
 
 ### 어플리케이션 커스텀 기능
 my-api:
