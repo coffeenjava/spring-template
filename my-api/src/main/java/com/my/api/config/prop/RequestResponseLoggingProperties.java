@@ -1,4 +1,4 @@
-package com.my.api.common.filter;
+package com.my.api.config.prop;
 
 import com.my.api.common.annotation.Description;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import java.util.Set;
  */
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "my-api.request-response-logging")
+@ConfigurationProperties(prefix = "custom.request-response-logging")
 public class RequestResponseLoggingProperties {
 
     @Description("로깅 사용 여부")

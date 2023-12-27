@@ -1,8 +1,8 @@
 spring:
   datasource:
-    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    driver-class-name: org.h2.Driver
 #    url: jdbc:h2:file:~/work/tool/h2db/testdb;MODE=MySQL
-    url: jdbc:log4jdbc:h2:mem:test;MODE=MySQL;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1
+    url: jdbc:h2:mem:test;MODE=MySQL;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1
     username: test
   jpa:
     properties:

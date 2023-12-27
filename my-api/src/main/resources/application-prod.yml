@@ -1,0 +1,5 @@
+custom:
+  request-response-logging:
+    line-break: false
+  api-call-logging:
+    line-break: false

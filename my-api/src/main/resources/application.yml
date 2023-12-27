@@ -70,8 +70,10 @@ management.endpoint.health.show-details: never
 #management.health.db.enabled: false # DB Connection 헬스 체크
 
 ### 어플리케이션 커스텀 기능
-my-api:
+custom:
   request-response-logging:
     line-break: true
     exclude-uri: # 로깅 제외할 요청 uri 패턴
       - ^\/(actuator)\/.* # 헬스체크
+  api-call-logging:
+    line-break: true
